@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antonio NQ — NQ Futures Mentorship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0D12;
+    --panel:#12161F;
+    --panel-line:#1E2530;
+    --text:#E8ECF1;
+    --muted:#7C8798;
+    --bull:#3DDC97;
+    --bear:#FF6B4A;
+    --mono:'JetBrains Mono', monospace;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- Ticker strip ---------- */
+  .ticker-wrap{
+    border-bottom:1px solid var(--panel-line);
+    background:var(--panel);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:10px 0;
+  }
+  .ticker{
+    display:inline-flex;
+    animation:scroll 28s linear infinite;
+  }
+  .ticker span{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--muted);
+    padding:0 24px;
+    border-right:1px solid var(--panel-line);
+  }
+  .ticker span.bull{color:var(--bull);}
+  .ticker span.bear{color:var(--bear);}
+  @keyframes scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ticker{animation:none;}
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:24px 6vw;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .logo{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:0.5px;
+  }
+  .logo span{color:var(--bull);}
+  nav .ig-link{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--muted);
+    border:1px solid var(--panel-line);
+    padding:8px 16px;
+    border-radius:2px;
+    transition:border-color .2s, color .2s;
+  }
+  nav .ig-link:hover{border-color:var(--bull);color:var(--bull);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:1200px;
+    margin:0 auto;
+    padding:8vw 6vw 6vw;
+    position:relative;
+  }
+  .hero-eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--bull);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:24px;
+  }
+  .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--bull);
+    box-shadow:0 0 8px var(--bull);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.3;}
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(2.2rem, 6vw, 4.5rem);
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    max-width:14ch;
+  }
+  h1 .accent{color:var(--bull);}
+  .hero-sub{
+    font-size:clamp(1rem, 1.6vw, 1.2rem);
+    color:var(--muted);
+    max-width:56ch;
+    margin-top:28px;
+  }
+  .hero-cta{
+    display:flex;
+    gap:16px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    font-family:var(--mono);
+    font-size:14px;
+    font-weight:500;
+    background:var(--bull);
+    color:#06120C;
+    padding:14px 28px;
+    border-radius:2px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(61,220,151,0.25);
+  }
+  .btn-secondary{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--text);
+    border:1px solid var(--panel-line);
+    padding:14px 28px;
+    border-radius:2px;
+    transition:border-color .2s;
+  }
+  .btn-secondary:hover{border-color:var(--muted);}
+
+  /* stat dashboard card */
+  .stat-card{
+    margin-top:64px;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    padding:0;
+    max-width:640px;
+    overflow:hidden;
+  }
+  .stat-card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 20px;
+    border-bottom:1px solid var(--panel-line);
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+  }
+  .stat-card-head .sym{color:var(--text);font-weight:600;letter-spacing:0.5px;}
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+  }
+  .stat-grid div{
+    padding:20px;
+    border-right:1px solid var(--panel-line);
+  }
+  .stat-grid div:last-child{border-right:none;}
+  .stat-num{
+    font-family:var(--mono);
+    font-size:clamp(1.3rem,2.5vw,1.8rem);
+    font-weight:600;
+    color:var(--bull);
+  }
+  .stat-label{
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-top:6px;
+  }
+
+  /* ---------- Section shared ---------- */
+  section{
+    max-width:1200px;
+    margin:0 auto;
+    padding:80px 6vw;
+    border-top:1px solid var(--panel-line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--bull);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-bottom:16px;
+  }
+  h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(1.6rem,3.5vw,2.4rem);
+    max-width:20ch;
+    margin-bottom:20px;
+  }
+  .section-sub{
+    color:var(--muted);
+    max-width:60ch;
+    font-size:1.05rem;
+  }
+
+  /* ---------- Offer grid ---------- */
+  .offer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:1px;
+    background:var(--panel-line);
+    border:1px solid var(--panel-line);
+    margin-top:48px;
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .offer-item{
+    background:var(--bg);
+    padding:32px 28px;
+  }
+  .offer-item .num{
+    font-family:var(--mono);
+    color:var(--bear);
+    font-size:13px;
+    margin-bottom:16px;
+    display:block;
+  }
+  .offer-item h3{
+    font-family:var(--display);
+    font-size:1.15rem;
+    margin-bottom:10px;
+  }
+  .offer-item p{
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+
+  /* ---------- Path / free vs 1to1 ---------- */
+  .path{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-top:48px;
+  }
+  @media (max-width:720px){.path{grid-template-columns:1fr;}}
+  .path-card{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    padding:32px;
+  }
+  .path-card.highlight{
+    border-color:var(--bull);
+    position:relative;
+  }
+  .path-card.highlight::before{
+    content:'CONSIGLIATO';
+    position:absolute;
+    top:-11px;
+    left:28px;
+    background:var(--bull);
+    color:#06120C;
+    font-family:var(--mono);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    padding:4px 10px;
+    border-radius:2px;
+  }
+  .path-card .tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .path-card h3{
+    font-family:var(--display);
+    font-size:1.4rem;
+    margin:10px 0 16px;
+  }
+  .path-card ul{
+    list-style:none;
+    margin-top:16px;
+  }
+  .path-card li{
+    font-size:0.95rem;
+    color:var(--text);
+    padding:8px 0;
+    border-top:1px solid var(--panel-line);
+    display:flex;
+    gap:10px;
+  }
+  .path-card li::before{
+    content:'—';
+    color:var(--muted);
+  }
+
+  /* ---------- Final CTA ---------- */
+  .final-cta{
+    text-align:center;
+    padding:100px 6vw;
+  }
+  .final-cta h2{
+    max-width:none;
+    margin:0 auto 20px;
+  }
+  .final-cta .section-sub{margin:0 auto 40px;}
+  .final-cta .btn-primary{
+    font-size:16px;
+    padding:18px 36px;
+  }
+
+  footer{
+    border-top:1px solid var(--panel-line);
+    padding:32px 6vw;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--muted);
+    max-width:1200px;
+    margin:0 auto;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .disclaimer{
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 6vw 40px;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+
+  <div class="ticker-wrap">
+    <div class="ticker" id="ticker"></div>
+  </div>
+
+  <nav>
+    <div class="logo">ANTONIO<span>_NQ</span></div>
+    <a class="ig-link" href="https://instagram.com/antonio_nq_" target="_blank" rel="noopener">@antonio_nq_ ↗</a>
+  </nav>
+
+  <section class="hero" style="border-top:none;padding-top:6vw;">
+    <div class="hero-eyebrow"><span class="dot"></span> NQ FUTURES · ICT · ORDER FLOW · PRICE ACTION</div>
+    <h1>Leggi il mercato come <span class="accent">order flow</span>, non come indovinelli.</h1>
+    <p class="hero-sub">Seguo NQ Futures ogni giorno e condivido gratuitamente analisi, setup e struttura di mercato. Se vuoi andare oltre i contenuti gratuiti, apro un numero limitato di posti per la mentorship 1to1.</p>
+    <div class="hero-cta">
+      <a class="btn-primary" href="https://instagram.com/antonio_nq_" target="_blank" rel="noopener">Scrivimi in DM su Instagram →</a>
+      <a class="btn-secondary" href="#mentorship">Scopri la mentorship</a>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-head">
+        <span class="sym">$ANTONIO_NQ</span>
+        <span>INSTAGRAM · LIVE</span>
+      </div>
+      <div class="stat-grid">
+        <div>
+          <div class="stat-num">27.8K</div>
+          <div class="stat-label">Follower</div>
+        </div>
+        <div>
+          <div class="stat-num">58</div>
+          <div class="stat-label">Post</div>
+        </div>
+        <div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Contenuti free</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Cosa trovi nei contenuti gratuiti</div>
+    <h2>Educazione NQ, ogni giorno, senza filtri.</h2>
+    <p class="section-sub">Analisi di struttura, order flow e price action applicate al Nasdaq Futures — pensate per chi vuole davvero capire il mercato, non solo copiare un segnale.</p>
+
+    <div class="offer-grid">
+      <div class="offer-item">
+        <span class="num">01</span>
+        <h3>ICT Concepts</h3>
+        <p>Liquidità, imbalance e struttura di mercato spiegati sul grafico reale, non in teoria.</p>
+      </div>
+      <div class="offer-item">
+        <span class="num">02</span>
+        <h3>Order Flow</h3>
+        <p>Come leggere il flusso degli ordini per capire dove si muovono davvero i grandi player.</p>
+      </div>
+      <div class="offer-item">
+        <span class="num">03</span>
+        <h3>Price Action</h3>
+        <p>Setup ripetibili basati sul comportamento del prezzo, senza indicatori superflui.</p>
+      </div>
+      <div class="offer-item">
+        <span class="num">04</span>
+        <h3>Community Discord</h3>
+        <p>Uno spazio gratuito per confrontarti con altri trader NQ e seguire le analisi in diretta.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mentorship">
+    <div class="eyebrow">Percorso</div>
+    <h2>Free content o mentorship 1to1: scegli il tuo passo.</h2>
+    <p class="section-sub">Il Discord e i contenuti su Instagram restano gratuiti. La mentorship 1to1 è per chi vuole un percorso guidato, su misura, per accelerare la curva di apprendimento.</p>
+
+    <div class="path">
+      <div class="path-card">
+        <span class="tag">Gratuito</span>
+        <h3>Contenuti free + Discord</h3>
+        <ul>
+          <li>Analisi giornaliere su Instagram</li>
+          <li>Accesso al server Discord</li>
+          <li>Confronto con la community</li>
+          <li>Nessun costo, nessun impegno</li>
+        </ul>
+      </div>
+      <div class="path-card highlight">
+        <span class="tag">Percorso guidato</span>
+        <h3>Mentorship 1to1</h3>
+        <ul>
+          <li>Percorso personalizzato sul tuo livello</li>
+          <li>Revisione diretta dei tuoi trade</li>
+          <li>Metodo ICT, order flow, price action</li>
+          <li>Contatto diretto in DM su Instagram</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta" style="border-top:1px solid var(--panel-line);">
+    <div class="eyebrow" style="justify-content:center;display:flex;">Prossimo passo</div>
+    <h2>Scrivimi in DM e parliamo del tuo percorso.</h2>
+    <p class="section-sub">Rispondo direttamente su Instagram — raccontami a che punto sei con il trading e valutiamo insieme se la mentorship fa per te.</p>
+    <a class="btn-primary" href="https://instagram.com/antonio_nq_" target="_blank" rel="noopener">Apri Instagram → @antonio_nq_</a>
+  </section>
+
+  <p class="disclaimer">Il trading su futures comporta un rischio elevato di perdita e non è adatto a tutti gli investitori. I contenuti di questo sito e della mentorship hanno finalità educativa e non costituiscono consulenza finanziaria personalizzata. I risultati passati non garantiscono risultati futuri.</p>
+
+  <footer>
+    <span>© <span id="year"></span> Antonio NQ</span>
+    <span>NQ Futures · ICT · Order Flow · Price Action</span>
+  </footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const items = [
+    {t:'NQ STRUCTURE: BULLISH BOS', c:'bull'},
+    {t:'LIQUIDITY SWEEP DETECTED', c:'bear'},
+    {t:'ORDER FLOW: BUYERS IN CONTROL', c:'bull'},
+    {t:'ICT: FVG FORMED H1', c:''},
+    {t:'PRICE ACTION: RANGE BREAK', c:'bull'},
+    {t:'DISCORD: LIVE ANALYSIS OPEN', c:''},
+    {t:'MENTORSHIP 1TO1: POSTI LIMITATI', c:'bear'},
+  ];
+  const ticker = document.getElementById('ticker');
+  const html = items.map(i => `<span class="${i.c}">${i.t}</span>`).join('');
+  ticker.innerHTML = html + html; // duplicated for seamless loop
+</script>
+
+</body>
+</html>
